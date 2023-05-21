@@ -18,7 +18,8 @@ const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
-        deprecationErrors: true,
+        deprecationErrors: true
+       
     }
 });
 
@@ -52,6 +53,13 @@ async function run() {
     const result = await cursor.toArray();
     res.send(result)
 
+})
+
+app;delete('/toys/:id', (req,res)=>{
+    const id = req.params.id;
+    const query = {_id : new ObjectId(id)}
+    const result = await.toysCollection.deleteOne(query);
+    res.send(result)
 })
 
 

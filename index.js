@@ -31,8 +31,9 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-// all data get
         const toysCollection = client.db('toyData').collection('toys');
+        const myToysCollection= client.db('toyData').collection('myToys');
+// all data get
         app.get('/toys', async (req, res)=> {
             const cursor = toysCollection.find();
             const result = await cursor.toArray();
@@ -49,16 +50,13 @@ async function run() {
         res.send(result)
        })
 
-        // app.get('/:id', (req, res)=>{
-        //     const id = req.params.id;
-            
-        //     const selectedChef = chef.find(item => item.id == id);
-        //     console.log(selectedChef)
-        //     res.send(selectedChef);  
-        //   })
-            
-
-
+//    create 
+   app.post('/myToys', async(req,res)=>{
+    const myToys = req.body;
+    console.log(myToys)
+    const result = await myToysCollection.insertOne(myToys);
+    res.send(result)
+   })
 
 
 

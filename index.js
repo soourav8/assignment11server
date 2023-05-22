@@ -33,34 +33,66 @@ async function run() {
         await client.connect();
 
         const toysCollection = client.db('toyData').collection('toys');
-        // const myToysCollection= client.db('toyData').collection('myToys');
+        
+
+
 // all data get
         app.get('/toys', async (req, res)=> {
             const cursor = toysCollection.find();
             const result = await cursor.toArray();
-            res.send(result)
+            
+            
+            console.log(req.query)
+            let query = {}
+            if(req.query?.email){
+                query={email: req.query.email}
+            }
+            const result2 = await toysCollection.find(query).toArray();
+            res.send(result2)
+            
+
+            
+
+
 
         })
 
-        //get my toys
-   app.get('/toys/:email', async (req, res)=> {
-    console.log(req.params.email);
-    let query = {};
-    if(req.params?.email){
-        query={email:req.params.email}
-    }
-    const cursor = toysCollection.find(query);
-    const result = await cursor.toArray();
+
+
+        
+  
+
+
+
+
+
+
+
+//single data get
+
+app.get('/toys/:id', async(req,res)=>{
+    const id = req.params.id;
+    
+    const query = {_id : new ObjectId(id)}
+    const result= await toysCollection.findOne(query);
     res.send(result)
+   })
 
-})
+   //create my toys data
+   app.post('/toys', async(req,res)=>{
+    const toys = req.body;
+    const result = await toysCollection.insertOne(toys);
+    res.send(result)
+   })
 
-// //update
-// app.patch('/toys/:id', async (req,res)=>{
-//     const updatedToys = req.body;
 
-// })
 
+
+
+
+
+
+//delete data
 app.delete('/toys/:id', async(req,res)=>{
     const id = req.params.id;
     const query = {_id : new ObjectId(id)}
@@ -70,21 +102,7 @@ app.delete('/toys/:id', async(req,res)=>{
 
 
 
-        //single data get
-
-       app.get('/toys/:id', async(req,res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result= await toysCollection.findOne(query);
-        res.send(result)
-       })
-
-       //create my toys data
-       app.post('/toys', async(req,res)=>{
-        const toys = req.body;
-        const result = await toysCollection.insertOne(toys);
-        res.send(result)
-       })
+        
 
 // //    create 
 //    app.post('/myToys', async(req,res)=>{
